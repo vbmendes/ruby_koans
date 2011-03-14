@@ -30,7 +30,19 @@ require File.expand_path(File.dirname(__FILE__) + '/edgecase')
 # Your goal is to write the score method.
 
 def score(dice)
-  # You need to write this method
+  result = 0
+  for i in (1..6)
+    n_dices = dice.count(i)
+    triple_score = 100 * i
+    if i == 1
+      triple_score = 1000
+      result += (n_dices % 3) * 100
+    elsif i == 5
+      result += (n_dices % 3) * 50
+    end
+    result += (n_dices / 3) * triple_score
+  end
+  result
 end
 
 class AboutScoringProject < EdgeCase::Koan
@@ -69,6 +81,12 @@ class AboutScoringProject < EdgeCase::Koan
   def test_score_of_mixed_is_sum
     assert_equal 250, score([2,5,2,2,3])
     assert_equal 550, score([5,5,5,5])
+  end
+
+  def test_score_of_six_ones
+    assert_equal 2000, score([1,1,1,1,1,1])
+    assert_equal 1000, score([5,5,5,5,5,5])
+    assert_equal 1200, score([6,6,6,6,6,6])
   end
 
 end
